@@ -2,6 +2,42 @@
 a set of swaths from ocean colour L2 around tasmania
 
 
+# 1. Run the code in dl.R 
+
+(relies on earth data login as per https://oceancolor.gsfc.nasa.gov/data/download_methods/)
+
+# 2. Install gdal for R and some helpers
+
+```R
+## install.packages("pak")
+pak::pkg_install("vapour")
+pak::pkg_install("palr")
+
+pak::pkg_install(file.path("hypertidy", c("dsn", "ximage", "whatarelief"))
+```
+
+# 3. Run the warper to get all the shiz
+
+```R
+library(vapour)
+sds <- dsn::sds(list.files(".", pattern = ".*\\.nc$"), "/geophysical_data/chlor_a", "NetCDF")
+d <- gdal_raster_data(sds, target_res = c(3000, 3000), target_crs = "EPSG:3111", resample = "average", 
+   options = c("-multi", "-wo", "NUM_THREADS=vALL_CPUS"))
+   
+```
+
+# 4. Get colours, make image
+
+```R
+library(ximage)
+library(palr)
+im <- d
+pal <- chl_pal(palette = TRUE)
+im[[1]] <- image_pal(d[[1]], col = pal$cols, breaks = pal$breaks)
+ximage(im)
+lines(whatarelief::coastline(extent = attr(d, "extent"), projection = attr(d, "projection")))
+```
+
 These are the getfiles: 
 
 ```
