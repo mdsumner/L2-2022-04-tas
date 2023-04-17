@@ -22,7 +22,7 @@ pak::pkg_install(file.path("hypertidy", c("dsn", "ximage", "whatarelief"))
 library(vapour)
 sds <- dsn::sds(list.files(".", pattern = ".*\\.nc$"), "/geophysical_data/chlor_a", "NetCDF")
 d <- gdal_raster_data(sds, target_res = c(3000, 3000), target_crs = "EPSG:3111", resample = "average", 
-   options = c("-multi", "-wo", "NUM_THREADS=vALL_CPUS"))
+   options = c("-multi", "-wo", "NUM_THREADS=ALL_CPUS"))
    
 ```
 
