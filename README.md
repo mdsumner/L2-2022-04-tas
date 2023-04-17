@@ -12,7 +12,7 @@ a set of swaths from ocean colour L2 around tasmania
 ## install.packages("pak")
 pak::pkg_install("vapour")
 pak::pkg_install("palr")
-
+pak::pkg_install("scales")
 pak::pkg_install(file.path("hypertidy", c("dsn", "ximage", "whatarelief"))
 ```
 
@@ -21,9 +21,8 @@ pak::pkg_install(file.path("hypertidy", c("dsn", "ximage", "whatarelief"))
 ```R
 library(vapour)
 sds <- dsn::sds(list.files(".", pattern = ".*\\.nc$"), "/geophysical_data/chlor_a", "NetCDF")
-d <- gdal_raster_data(sds, target_res = c(3000, 3000), target_crs = "EPSG:3111", resample = "average", 
+d <- gdal_raster_data(sds,  target_ext = c(-1, 1, -1, 1) * 400000, target_res = c(3000, 3000), target_crs = "+proj=laea +lon_0=147 +lat_0=-42", resample = "average", 
    options = c("-multi", "-wo", "NUM_THREADS=ALL_CPUS"))
-   
 ```
 
 # 4. Get colours, make image
@@ -33,6 +32,7 @@ library(ximage)
 library(palr)
 im <- d
 pal <- chl_pal(palette = TRUE)
+pal$cols <- scales::alpha(pal$cols, 0.7)
 im[[1]] <- image_pal(d[[1]], col = pal$cols, breaks = pal$breaks)
 ximage(im)
 lines(whatarelief::coastline(extent = attr(d, "extent"), projection = attr(d, "projection")))
