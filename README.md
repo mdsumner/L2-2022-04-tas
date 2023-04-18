@@ -20,7 +20,6 @@ pak::pkg_install(file.path("hypertidy", c("dsn", "ximage", "whatarelief"))
 
 ```R
 library(vapour)
-vapour_set_config("GDAL_DISABLE_READDIR_ON_OPEN", "EMPTY_DIR")
 
 sds <- dsn::sds(list.files(".", pattern = ".*\\.nc$"), "/geophysical_data/chlor_a", "NetCDF")
 d <- gdal_raster_data(sds,  target_ext = c(-1, 1, -1, 1) * 400000, 
