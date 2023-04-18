@@ -20,9 +20,13 @@ pak::pkg_install(file.path("hypertidy", c("dsn", "ximage", "whatarelief"))
 
 ```R
 library(vapour)
+vapour_set_config("GDAL_DISABLE_READDIR_ON_OPEN", "EMPTY_DIR")
+
 sds <- dsn::sds(list.files(".", pattern = ".*\\.nc$"), "/geophysical_data/chlor_a", "NetCDF")
-d <- gdal_raster_data(sds,  target_ext = c(-1, 1, -1, 1) * 400000, target_res = c(3000, 3000), target_crs = "+proj=laea +lon_0=147 +lat_0=-42", resample = "average", 
+d <- gdal_raster_data(sds,  target_ext = c(-1, 1, -1, 1) * 400000, 
+target_res = c(3000, 3000), target_crs = "+proj=laea +lon_0=147 +lat_0=-42", resample = "average", 
    options = c("-multi", "-wo", "NUM_THREADS=ALL_CPUS"))
+   
 ```
 
 # 4. Get colours, make image
